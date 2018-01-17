@@ -2,6 +2,7 @@
 #include <algorithm>
 using namespace std;
 
+
 int main()
 {
 	int V, N, value[1000], volumn[1000], bag[10000] = { 0 };
@@ -14,4 +15,4 @@ int main()
 			if (volumn[i] <= v)
 				bag[v] = max(bag[v - volumn[i]] + value[i], bag[v]);
 	printf("%d", bag[V]);
-}
+};\

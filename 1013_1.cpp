@@ -29,6 +29,5 @@ int main() {
 
 	printf("%d", f[V]);//完成递归以后f[V]就是最大权值
 
-
 	return 0;
 }
