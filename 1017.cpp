@@ -7,7 +7,7 @@ using namespace std;
 class integer
 {
 	friend istream &operator>>(istream &is, integer &n);
-	friend ostream &operator<<(ostream &os, integer &n);
+	friend ostream &operator<<(ostream &os, const integer &n);
 	string num;
 public:
 	integer(string s) :num(s) {}
@@ -105,7 +105,7 @@ istream &operator>>(istream &is, integer &n)
 	return is;
 }
 
-ostream &operator<<(ostream &os, integer &n)
+ostream &operator<<(ostream &os, const integer &n) //注意第二个参数必须是const &，非常量引用会出问题。
 {
 	os << n.num;
 	return os;
@@ -113,10 +113,9 @@ ostream &operator<<(ostream &os, integer &n)
 
 int main()
 {
-	string x, y, z;
+	integer a(""), b(""), c("");
 	int N;
-	cin >> x >> y >> z >> N;
-	integer a(x), b(y), c(z);//不能直接cin输入integer，涉及“非常量引用的初始值必须是左值”的问题
+	cin >> a >> b >> c >> N;
 	integer y0("1"), y1("0"), y2("0"), y3("0"), tmp("0");
 	for (int i = 0; i < N; ++i)
 	{
@@ -126,5 +125,5 @@ int main()
 		y2 = y1;
 		y1 = tmp;
 	}
-	cout << (y0 + y1 + y2 + y3).getString();
+	cout << y0 + y1 + y2 + y3;
 }
