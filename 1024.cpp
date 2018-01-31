@@ -52,5 +52,6 @@ int main()
 		}
 	}
 
+	
 	printf("%d", total);
 }
