@@ -78,7 +78,7 @@ public:
 	void traverse() const;
 	linkList<elemType> operator=(const linkList<elemType> &l)
 	{
-		head = l.head();
+		head = l.head;
 	}
 };
 
@@ -181,3 +181,8 @@ void linkList<elemType>::traverse() const
 		p = p->next;
 	}
 }
+
+template <class elemType>
+void linkList<elemType>::reverse()
+{
+	node
