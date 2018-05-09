@@ -5,6 +5,13 @@ using namespace std;
 template<class T>
 class set
 {
+	template<class U>
+	friend set<U> operator*(const set<U> &a, const set<U> &b);
+	template<class U>
+	friend set<U> operator+(const set<U> &a, const set<U> &b);
+	template<class U>
+	friend set<U> operator-(const set<U> &a, const set<U> &b);
+
 private:
 	T * elem;
 	int size, volumn;
@@ -19,7 +26,7 @@ public:
 		delete[] elem;
 	}
 
-	set &operator=(const set<T> &a);
+	set<T> &operator=(const set<T> &a);
 	int Get_Size()
 	{
 		return size;
@@ -28,38 +35,13 @@ public:
 	bool erase(T x);
 	void display();
 	void sort();
-
-
-	friend set<T> operator*(const set<T> &a, const set<T> &b)
-	{
-		set<T> c;
-		for (int i = 0; i < a.size; ++i)
-			if (b.exist(a.elem[i]))
-				c.insert(a.elem[i]);
-		return c;
-	}
-	friend set<T> operator+(const set<T> &a, const set<T> &b)
-	{
-		set<T> c = a;
-		for (int i = 0; i < b.size; ++i)
-			c.insert(b.elem[i]);
-		return c;
-	}
-	friend set<T> operator-(const set<T> &a, const set<T> &b)
-	{
-		set<T> c;
-		for (int i = 0; i < a.size; ++i)
-			if (!b.exist(a.elem[i]))
-				c.insert(a.elem[i]);
-		return c;
-	}
 };
 
 template<class T>
 set<T>::set()
 {
 	size = 0;
-	volumn = 201;
+	volumn = 20;
 	elem = new T[volumn];
 }
 
@@ -131,17 +113,19 @@ bool set<T>::erase(T x)
 template<class T>
 void set<T>::display()
 {
+	sort();
 	for (int i = 0; i < size; ++i)
 		cout << elem[i] << ' ';
-	cout << endl;
+	cout << '\n';
 }
 
 template<class T>
 set<T> &set<T>::operator=(const set<T> &a)
 {
 	size = a.size;
+	volumn = a.volumn;
 	delete[] elem;
-	elem = new T[size];
+	elem = new T[volumn];
 	for (int i = 0; i < size; ++i)
 		elem[i] = a.elem[i];
 	return *this;
@@ -157,7 +141,7 @@ void set<T>::sort()
 		minIndex = i;
 		for (int j = i + 1; j < size; ++j)
 		{
-			if (elem[j] < elem[i])
+			if (elem[j] < min)
 			{
 				min = elem[j];
 				minIndex = j;
@@ -167,6 +151,35 @@ void set<T>::sort()
 		elem[i] = elem[minIndex];
 		elem[minIndex] = tmp;
 	}
+}
+
+template<class T>
+set<T> operator*(const set<T> &a, const set<T> &b)
+{
+	set<T> c;
+	for (int i = 0; i < a.size; ++i)
+		if (b.exist(a.elem[i]))
+			c.insert(a.elem[i]);
+	return c;
+}
+
+template<class T>
+set<T> operator+(const set<T> &a, const set<T> &b)
+{
+	set<T> c = a;
+	for (int i = 0; i < b.size; ++i)
+		c.insert(b.elem[i]);
+	return c;
+}
+
+template<class T>
+set<T> operator-(const set<T> &a, const set<T> &b)
+{
+	set<T> c;
+	for (int i = 0; i < a.size; ++i)
+		if (!b.exist(a.elem[i]))
+			c.insert(a.elem[i]);
+	return c;
 }
 
 
@@ -189,20 +202,23 @@ int main()
 		switch (s)
 		{
 		case '+':
+		{
 			a = a + b;
-			a.sort();
 			a.display();
 			break;
+		}
 		case '-':
+		{
 			a = a - b;
-			a.sort();
 			a.display();
 			break;
+		}
 		case '*':
+		{
 			a = a * b;
-			a.sort();
 			a.display();
 			break;
+		}
 		}
 	}
 }
