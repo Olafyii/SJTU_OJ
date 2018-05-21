@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory.h>
 
 using namespace std;
 
@@ -69,8 +70,9 @@ int cnt = 1;
 int N, A, B,
 p, q,
 r, all;
-int *visit, *path;
-int linked[1000][1000] = { 0 };//邻接矩阵
+int *path;
+bool *visited;
+bool **linked;//邻接矩阵
 void findPath(int s, int A, int B)
 {
 	if (!flag)
@@ -84,13 +86,13 @@ void findPath(int s, int A, int B)
 		return;
 	}
 	for (int i = 1; i < all + 1; ++i)
-		if (linked[s][i] && !visit[i])
+		if (linked[s][i] && !visited[i])
 		{
-			visit[i] = 1;
+			visited[i] = 1;
 			path[cnt++] = i;
 			findPath(i, A, B);
 			cnt--;
-			visit[i] = 0;
+			visited[i] = 0;
 		}
 }
 
@@ -99,14 +101,20 @@ int main()
 
 	scanf("%d%d%d", &N, &A, &B);
 	all = (1 + N) * N / 2;
-	visit = new int[all + 1];
+	visited = new bool[all + 1];
 	path = new int[all + 1];
 	for (int i = 1; i < all + 1; ++i)
 	{
-		visit[i] = 0;
+		visited[i] = 0;
 		path[i] = 0;
 	}
-	visit[A] = 1;
+	visited[A] = 1;
+	linked = new bool*[all + 1];
+	for (int i = 0; i < all + 1; ++i)
+	{
+		linked[i] = new bool[all + 1];
+		memset(linked[i], 0, (all + 1) * sizeof(bool));
+	}
 
 	DisjointSet a(all);
 
@@ -150,4 +158,9 @@ int main()
 	}
 
 	findPath(A, A, B);
+
+	delete[] visited;
+	delete[] path;
+	for (int i = 0; i < all + 1; ++i)
+		delete[] linked[i];
 }
